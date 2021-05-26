@@ -1,5 +1,5 @@
 const urlParams = new URLSearchParams(window.location.search);
-const debug = urlParams.get('debug') !== null || true
+const debug = urlParams.get('debug') !== null
 
 var state = {
   'turn' : 0,
@@ -36,12 +36,12 @@ function display() {
   }
 
   var html = `
-  <table>
-  <tr><td colspan="2">image : ${data[state.level].name} debug=${debug}</td></tr>
+  <table style="table-layout:fixed;">
+  <tr><td colspan="2"><img src="https://ikarus.snowmon.ch/wp-content/uploads/2021/05/level${state.level+1}.png" /></td></tr>
   <tr><td colspan="2">${info}</td></tr>
   <tr><td colspan="2"><b>${who}</b> werde antworten :</td></tr>
   <tr><td>${msg_e}</td><td>${msg_d}</td></tr>
-  <tr><td><button onclick="plus()">Eskalation</button></td><td><button onclick="minus()">Deeskalation</button></td></tr>
+  <tr><td style="max-width:50%;width:50%;"><button onclick="plus()">Eskalation</button></td><td style="max-width:50%;width:50%;"><button onclick="minus()">Deeskalation</button></td></tr>
   </table>
   `;
 
@@ -90,6 +90,9 @@ function update() {
 
   document.getElementById("game-g7-2").innerHTML = display();
   document.getElementById("debug-g7-2").innerHTML = display_debug();
+  if (!debug) {
+    document.getElementById("debug-g7-2").style.display = "none"
+  }
   state.turn++
 }
 
