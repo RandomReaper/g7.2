@@ -17,25 +17,48 @@ function display() {
   var msg_d = '?'
   var info = ''
 
-  if (state.turn== 0) {
-     info = data[state.level].start
+  if (state.turn == 0) {
+    info = data[state.level].start
   }
-  if (state.turn % 2 == 0) {
-      msg_e = rnd(data[state.level]['samir_e'])
-      msg_d = rnd(data[state.level]['samir_d'])
-    } else {
-      msg_e = rnd(data[state.level]['nathan_e'])
-      msg_d = rnd(data[state.level]['nathan_d'])
-    }
 
-  html = `
+  if (state.plus == 5) {
+    info = '<b>Achtung!</b>Der Konflikt überschreitet die Eskalationsstufe, auf der Selbsthilfe und eine win-win-Lösung noch möglich sind.'
+  }
+
+  if (state.turn % 2 == 1) {
+    who = 'Samir'
+    msg_e = rnd(data[state.level]['samir_e'])
+    msg_d = rnd(data[state.level]['samir_d'])
+  } else {
+    who = 'Nathan'
+    msg_e = rnd(data[state.level]['nathan_e'])
+    msg_d = rnd(data[state.level]['nathan_d'])
+  }
+
+  var html = `
   <table>
   <tr><td colspan="2">image : ${data[state.level].name} debug=${debug}</td></tr>
   <tr><td colspan="2">${info}</td></tr>
+  <tr><td colspan="2"><b>${who}</b> werde antworten :</td></tr>
   <tr><td>${msg_e}</td><td>${msg_d}</td></tr>
   <tr><td><button onclick="plus()">Eskalation</button></td><td><button onclick="minus()">Deeskalation</button></td></tr>
   </table>
-  `
+  `;
+
+  if (state.win) {
+    html =
+    `
+    ENDE. Der Konflikt ist beigelegt. Samir und Nathan haben sich versöhnt.
+    `
+  }
+
+  if (state.lost) {
+    html =
+    `
+    ENDE. Der Konflikt endet vor Gericht. Samir und Nathan sind keine Freunde mehr.
+    `
+  }
+
   return html;
 }
 
@@ -44,6 +67,27 @@ function game() {
 }
 
 function update() {
+  if (state.plus > 5) {
+    if (state.level < 2) {
+      state.level++
+      state.turn = 0
+      state.plus = 0
+      state.minus = 0
+    } else {
+      state.lost = true
+    }
+  }
+  if (state.minus >= 3) {
+    if (state.level > 1) {
+      state.level--
+      state.turn = 0
+      state.plus = 0
+      state.minus = 0
+    } else {
+      state.win = true
+    }
+  }
+
   document.getElementById("game-g7-2").innerHTML = display();
   document.getElementById("debug-g7-2").innerHTML = display_debug();
   state.turn++
