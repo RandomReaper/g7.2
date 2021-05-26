@@ -22,7 +22,7 @@ function display() {
   }
 
   if (state.plus == 5) {
-    info = '<b>Achtung!</b>Der Konflikt überschreitet die Eskalationsstufe, auf der Selbsthilfe und eine win-win-Lösung noch möglich sind.'
+    info = '<b>Achtung!</b> Der Konflikt überschreitet die Eskalationsstufe, auf der Selbsthilfe und eine win-win-Lösung noch möglich sind.'
   }
 
   if (state.turn % 2 == 1) {
@@ -48,14 +48,22 @@ function display() {
   if (state.win) {
     html =
     `
-    ENDE. Der Konflikt ist beigelegt. Samir und Nathan haben sich versöhnt.
+    <table style="table-layout:fixed;">
+    <tr><td colspan="2"><img src="https://ikarus.snowmon.ch/wp-content/uploads/2021/05/win.png" /></td></tr>
+    <tr><td colspan="2">ENDE. Der Konflikt ist beigelegt. Samir und Nathan haben sich versöhnt.</td></tr>
+    </table>
     `
   }
 
   if (state.lost) {
     html =
     `
-    ENDE. Der Konflikt endet vor Gericht. Samir und Nathan sind keine Freunde mehr.
+    <table style="table-layout:fixed;">
+    <tr><td colspan="2"><img src="https://ikarus.snowmon.ch/wp-content/uploads/2021/05/lost.png" /></td></tr>
+    <tr><td colspan="2">Ende. Der Konflikt endet vor Gericht. Samir und Nathan sind keine Freunde mehr.</td></tr>
+    </table>
+    `
+    `
     `
   }
 
