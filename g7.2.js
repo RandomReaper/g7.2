@@ -2,17 +2,37 @@ const urlParams = new URLSearchParams(window.location.search);
 const debug = urlParams.get('debug') !== null || true
 
 var state = {
+  'turn' : 0,
   'level' : 0,
   'plus' : 0,
   'minus' : 0,
 }
 
+function rnd(a) {
+  return a[Math.floor(Math.random() * a.length)];
+}
+
 function display() {
+  var msg_e = '?'
+  var msg_d = '?'
+  var info = ''
+
+  if (state.turn== 0) {
+     info = data[state.level].start
+  }
+  if (state.turn % 2 == 0) {
+      msg_e = rnd(data[state.level]['samir_e'])
+      msg_d = rnd(data[state.level]['samir_d'])
+    } else {
+      msg_e = rnd(data[state.level]['nathan_e'])
+      msg_d = rnd(data[state.level]['nathan_d'])
+    }
+
   html = `
   <table>
   <tr><td colspan="2">image : ${data[state.level].name} debug=${debug}</td></tr>
-  <tr><td colspan="2">question : ${data[state.level].name}</td></tr>
-  <tr><td colspan="2">warning goes here</td></tr>
+  <tr><td colspan="2">${info}</td></tr>
+  <tr><td>${msg_e}</td><td>${msg_d}</td></tr>
   <tr><td><button onclick="plus()">Eskalation</button></td><td><button onclick="minus()">Deeskalation</button></td></tr>
   </table>
   `
@@ -26,6 +46,7 @@ function game() {
 function update() {
   document.getElementById("game-g7-2").innerHTML = display();
   document.getElementById("debug-g7-2").innerHTML = display_debug();
+  state.turn++
 }
 
 function display_debug() {
