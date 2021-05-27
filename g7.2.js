@@ -1,15 +1,16 @@
 const urlParams = new URLSearchParams(window.location.search);
 const debug = urlParams.get('debug') !== null
+const showReference = true
 
-var state = {
-  'turn' : 0,
-  'level' : 0,
-  'plus' : 0,
-  'minus' : 0,
-}
+var state;
 
 function rnd(a) {
-  return a[Math.floor(Math.random() * a.length)];
+  r = a[Math.floor(Math.random() * a.length)]
+  if (showReference) {
+    return r
+  } else {
+    return r[1]
+  }
 }
 
 function display() {
@@ -35,10 +36,14 @@ function display() {
     msg_d = rnd(data[state.level]['nathan_d'])
   }
 
+  if (info != '') {
+    info = `<tr><td colspan="2">${info}</td></tr>`
+  }
+
   var html = `
   <table style="table-layout:fixed;">
   <tr><td colspan="2"><img src="https://ikarus.snowmon.ch/wp-content/uploads/2021/05/level${state.level+1}.png" /></td></tr>
-  <tr><td colspan="2">${info}</td></tr>
+  ${info}
   <tr><td colspan="2"><b>${who}</b> werde antworten :</td></tr>
   <tr><td>${msg_e}</td><td>${msg_d}</td></tr>
   <tr><td style="max-width:50%;width:50%;"><button onclick="plus()">Eskalation</button></td><td style="max-width:50%;width:50%;"><button onclick="minus()">Deeskalation</button></td></tr>
@@ -51,6 +56,7 @@ function display() {
     <table style="table-layout:fixed;">
     <tr><td colspan="2"><img src="https://ikarus.snowmon.ch/wp-content/uploads/2021/05/win.png" /></td></tr>
     <tr><td colspan="2">ENDE. Der Konflikt ist beigelegt. Samir und Nathan haben sich versöhnt.</td></tr>
+    <tr><td colspan="2"><button onclick="game()">Wiederhollen</button></td></tr>
     </table>
     `
   }
@@ -61,9 +67,8 @@ function display() {
     <table style="table-layout:fixed;">
     <tr><td colspan="2"><img src="https://ikarus.snowmon.ch/wp-content/uploads/2021/05/lost.png" /></td></tr>
     <tr><td colspan="2">Ende. Der Konflikt endet vor Gericht. Samir und Nathan sind keine Freunde mehr.</td></tr>
+    <tr><td colspan="2"><button onclick="game()">Wiederhollen</button></td></tr>
     </table>
-    `
-    `
     `
   }
 
@@ -71,6 +76,12 @@ function display() {
 }
 
 function game() {
+  state = {
+    'turn' : 0,
+    'level' : 0,
+    'plus' : 0,
+    'minus' : 0,
+  }
   update()
 }
 
