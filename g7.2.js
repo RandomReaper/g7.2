@@ -26,7 +26,7 @@ function display() {
     info = '<b>Achtung!</b> Der Konflikt überschreitet die Eskalationsstufe, auf der Selbsthilfe und eine win-win-Lösung noch möglich sind.'
   }
 
-  if (state.turn % 2 == 1) {
+  if (state.turn % 2 == 0) {
     who = 'Samir'
     msg_e = rnd(data[state.level]['samir_e'])
     msg_d = rnd(data[state.level]['samir_d'])
@@ -36,17 +36,24 @@ function display() {
     msg_d = rnd(data[state.level]['nathan_d'])
   }
 
-  if (info != '') {
-    info = `<tr><td colspan="2">${info}</td></tr>`
+  if (state.plus > 0) {
+    text = who + ": " + msg_e
+  }
+  else if (state.minus > 0) {
+    text = who + ": " + msg_d
+  } else {
+    text = info
   }
 
   var html = `
   <table style="table-layout:fixed;">
-  <tr><td colspan="2"><img src="https://ikarus.snowmon.ch/wp-content/uploads/2021/05/level${state.level+1}.png" /></td></tr>
-  ${info}
-  <tr><td colspan="2"><b>${who}</b> werde antworten :</td></tr>
-  <tr><td>${msg_e}</td><td>${msg_d}</td></tr>
-  <tr><td style="max-width:50%;width:50%;"><button onclick="plus()">Eskalation</button></td><td style="max-width:50%;width:50%;"><button onclick="minus()">Deeskalation</button></td></tr>
+  <tr><td colspan="2">
+    <div class="g7container" style="border: 1px solid #DDDDDD; width: 533px; height: 400px; position: relative;">
+      <div class="g7text" style="float: left; position: absolute; left: 0px; top: 0px; z-index: 1000; background-color: #d0d0d0; padding: 5px; color: #000000; font-weight: bold; text-align:center">${text}</div>
+      <img id="g7img" src="https://ikarus.snowmon.ch/wp-content/uploads/2021/05/level${state.level+1}.png" style="float:left;position:aboslute;left:0px;top:0px;z-index: 1000;color:#92AD40"/>
+    </div>
+  </td></tr>
+  <tr><td style="max-width:50%;width:50%;"><button onclick="plus()">▲</button></td><td style="max-width:50%;width:50%;"><button onclick="minus()">▼</button></td></tr>
   </table>
   `;
 
@@ -54,8 +61,12 @@ function display() {
     html =
     `
     <table style="table-layout:fixed;">
-    <tr><td colspan="2"><img src="https://ikarus.snowmon.ch/wp-content/uploads/2021/05/win.png" /></td></tr>
-    <tr><td colspan="2">ENDE. Der Konflikt ist beigelegt. Samir und Nathan haben sich versöhnt.</td></tr>
+    <tr><td colspan="2">
+    <div class="g7container" style="border: 1px solid #DDDDDD; width: 533px; height: 400px; position: relative;">
+      <div class="g7text" style="float: left; position: absolute; left: 0px; top: 0px; z-index: 1000; background-color: #d0d0d0; padding: 5px; color: #000000; font-weight: bold; text-align:center">Der Konflikt ist beigelegt. Samir und Nathan haben sich versöhnt.</div>
+      <img id="g7img" src="https://ikarus.snowmon.ch/wp-content/uploads/2021/05/win.png" style="float:left;position:aboslute;left:0px;top:0px;z-index: 1000;color:#92AD40"/>
+    </div>
+    </td></tr>
     <tr><td colspan="2"><button onclick="game()">Wiederhollen</button></td></tr>
     </table>
     `
@@ -65,14 +76,28 @@ function display() {
     html =
     `
     <table style="table-layout:fixed;">
-    <tr><td colspan="2"><img src="https://ikarus.snowmon.ch/wp-content/uploads/2021/05/lost.png" /></td></tr>
-    <tr><td colspan="2">Ende. Der Konflikt endet vor Gericht. Samir und Nathan sind keine Freunde mehr.</td></tr>
+    <tr><td colspan="2">
+    <div class="g7container" style="border: 1px solid #DDDDDD; width: 533px; height: 400px; position: relative;">
+      <div class="g7text" style="float: left; position: absolute; left: 0px; top: 0px; z-index: 1000; background-color: #d0d0d0; padding: 5px; color: #000000; font-weight: bold; text-align:center">Der Konflikt endet vor Gericht. Samir und Nathan sind keine Freunde mehr.</div>
+      <img id="g7img" src="https://ikarus.snowmon.ch/wp-content/uploads/2021/05/lost.png" style="float:left;position:aboslute;left:0px;top:0px;z-index: 1000;color:#92AD40"/>
+    </div>
+    </td></tr>
     <tr><td colspan="2"><button onclick="game()">Wiederhollen</button></td></tr>
     </table>
     `
   }
-
-  return html;
+  var x = {}
+  x.html = html
+  x.who = who
+  if (state.plus > 0) {
+    x.text = msg_e
+  }
+  else if (state.minus > 0) {
+    x.text = msg_d
+  } else {
+    x.text = info
+  }
+  return x;
 }
 
 function game() {
@@ -107,7 +132,8 @@ function update() {
     }
   }
 
-  document.getElementById("game-g7-2").innerHTML = display();
+  result = display()
+  document.getElementById("game-g7-2").innerHTML = result.html;
   document.getElementById("debug-g7-2").innerHTML = display_debug();
   if (!debug) {
     document.getElementById("debug-g7-2").style.display = "none"
