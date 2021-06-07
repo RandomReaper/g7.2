@@ -1,6 +1,6 @@
 const urlParams = new URLSearchParams(window.location.search);
 const debug = urlParams.get('debug') !== null
-const showReference = true
+const showReference = false
 
 var state;
 
@@ -22,10 +22,6 @@ function display() {
     info = data[state.level].start
   }
 
-  if (state.plus == 5) {
-    info = '<b>Achtung!</b> Der Konflikt überschreitet die Eskalationsstufe, auf der Selbsthilfe und eine win-win-Lösung noch möglich sind.'
-  }
-
   if (state.turn % 2 == 0) {
     who = 'Samir'
     msg_e = rnd(data[state.level]['samir_e'])
@@ -43,6 +39,10 @@ function display() {
     text = who + ": " + msg_d
   } else {
     text = info
+  }
+
+  if (state.plus == 5) {
+    text = text + '<br/><i>Achtung!</i> Der Konflikt überschreitet die Eskalationsstufe, auf der Selbsthilfe und eine win-win-Lösung noch möglich sind.'
   }
 
   var html = `
@@ -122,7 +122,7 @@ function update() {
     }
   }
   if (state.minus >= 3) {
-    if (state.level > 1) {
+    if (state.level >= 1) {
       state.level--
       state.turn = 0
       state.plus = 0
