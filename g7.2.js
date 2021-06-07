@@ -35,6 +35,9 @@ function display() {
   if (state.turn == 0) {
     info = data[state.level].start
     points = "0,0 0,0 0,0"
+    if (state.level == 0) {
+      points = "100,0 300,0 150,150"
+    }
   }
 
   if (state.plus > 0) {
@@ -54,7 +57,7 @@ function display() {
   <table style="table-layout:fixed;">
   <tr><td colspan="2">
     <div class="g7container" style="border: 1px solid #DDDDDD; width: 533px; height: 400px; position: relative;">
-      <div class="g7text" style="float: left; position: absolute; left: 0px; top: 0px; z-index: 1000; background-color: #c0c0c0; padding: 5px; color: #000000; font-weight: bold; text-align:center">${text}</div>
+      <div class="g7text" style="float: left; position: absolute; left: 0px; top: 0px; z-index: 1000;width: 523px; background-color: #c0c0c0; padding: 5px; color: #000000; font-weight: bold; text-align:center">${text}</div>
       <img id="g7img" src="https://ikarus.snowmon.ch/wp-content/uploads/2021/05/level${state.level+1}.png" style="float:left;position:aboslute;left:0px;top:0px;z-index: 1000;color:#92AD40"/>
       <svg viewBox="0 0 533 400" style="float: left; position: absolute; left: 0px; top: 0px; z-index: 500">
         <polygon points="${points}" fill="#c0c0c0"/>
@@ -170,7 +173,7 @@ function minus() {
 var data =
 [
   {
-    'start':"Samir: Mich stört, dass du das Geheimnis, das ich dir anvertraut habe, weitererzählt hast.",
+    'start':"Mich stört, dass du das Geheimnis, das ich dir anvertraut habe, weitererzählt hast.",
     'samir_e': [
      ["1-3a","Immer erzählst du meine privaten Angelegenheiten weiter!"],
      ["1-5a","Du bist kein guter Freund, wenn du so mit mir umgehst."],
