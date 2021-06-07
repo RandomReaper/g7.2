@@ -18,25 +18,30 @@ function display() {
   var msg_d = '?'
   var info = ''
 
-  if (state.turn == 0) {
-    info = data[state.level].start
-  }
+  var points = "0,0 0,0 0,0"
 
   if (state.turn % 2 == 0) {
+    points = "100,0 300,0 150,150"
     who = 'Samir'
     msg_e = rnd(data[state.level]['samir_e'])
     msg_d = rnd(data[state.level]['samir_d'])
   } else {
+    points = "333,0 433,0 383,150"
     who = 'Nathan'
     msg_e = rnd(data[state.level]['nathan_e'])
     msg_d = rnd(data[state.level]['nathan_d'])
   }
 
+  if (state.turn == 0) {
+    info = data[state.level].start
+    points = "0,0 0,0 0,0"
+  }
+
   if (state.plus > 0) {
-    text = who + ": " + msg_e
+    text = msg_e
   }
   else if (state.minus > 0) {
-    text = who + ": " + msg_d
+    text = msg_d
   } else {
     text = info
   }
@@ -49,8 +54,11 @@ function display() {
   <table style="table-layout:fixed;">
   <tr><td colspan="2">
     <div class="g7container" style="border: 1px solid #DDDDDD; width: 533px; height: 400px; position: relative;">
-      <div class="g7text" style="float: left; position: absolute; left: 0px; top: 0px; z-index: 1000; background-color: #d0d0d0; padding: 5px; color: #000000; font-weight: bold; text-align:center">${text}</div>
+      <div class="g7text" style="float: left; position: absolute; left: 0px; top: 0px; z-index: 1000; background-color: #c0c0c0; padding: 5px; color: #000000; font-weight: bold; text-align:center">${text}</div>
       <img id="g7img" src="https://ikarus.snowmon.ch/wp-content/uploads/2021/05/level${state.level+1}.png" style="float:left;position:aboslute;left:0px;top:0px;z-index: 1000;color:#92AD40"/>
+      <svg viewBox="0 0 533 400" style="float: left; position: absolute; left: 0px; top: 0px; z-index: 500">
+        <polygon points="${points}" fill="#c0c0c0"/>
+      </svg>
     </div>
   </td></tr>
   <tr><td style="max-width:50%;width:50%;"><button onclick="plus()">▲</button></td><td style="max-width:50%;width:50%;"><button onclick="minus()">▼</button></td></tr>
